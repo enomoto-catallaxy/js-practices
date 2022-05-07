@@ -1,6 +1,6 @@
-let today = new Date();//月は-1、日は+1が月初め
-let firstday = new Date(2022,4,1); // 月は-1、日は２が月初め
-let lastday = new Date(2022,5,0); // 月はそのまま、日は0が月末
+let today = new Date();
+let firstday = new Date(2022,4,1); 
+let lastday = new Date(2022,5,0);
 
 let year = today.getFullYear();
 let month = today.getMonth() + 1;
@@ -47,6 +47,6 @@ let oneweekarrays = eachSlice([...space_dayarrays],7);
 for(let i = 0; i < oneweekarrays.length; i++){
   for(let j = 0; j < oneweekarrays[i].length; j++){
     process.stdout.write(oneweekarrays[i][j].padStart(3, ' '));
-  }console.log("\n");
+  }console.log();
 }
 //
