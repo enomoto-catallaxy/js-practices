@@ -10,19 +10,19 @@ if(argv.y){
 }else{
   year = today.getFullYear();
 }
-let firstday = new Date(year,month-1,1); 
-let lastday = new Date(year,month,0);
+let firstday = new Date(year, month - 1, 1); 
+let lastday = new Date(year, month, 0);
 
 let last_date = lastday.getDate();
 let dayarrays = [];
 for(i = 0; i < last_date; i++){
-  dayarrays.push(i+1);
+  dayarrays.push(i + 1);
   dayarrays[i] = String(dayarrays[i]);
 }
 
 const dayname = ['日','月','火','水','木','金','土'];
 console.log('       ' + month + '月 ' + year);
-for(let i=0; i<7; i++){
+for(let i = 0; i < 7; i++){
   process.stdout.write(dayname[i].padStart(2, ' '));
 }console.log();
 
@@ -35,7 +35,7 @@ const eachSlice = (arr, n = 2, result = []) => {
 }
 
 let first_dayofweek = firstday.getDay();
-let spacearrays = []
+let spacearrays = [];
 if(first_dayofweek != 0){
   for(let i = 0; i < first_dayofweek; i++){
     spacearrays[i] = ('  ');
