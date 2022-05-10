@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fetch API による HTTPリクエスト</title>
+</head>
+
+<body>
+  <h1>Fetch API による HTTPリクエスト</h1>
+  <button id="button01">HTTPリクエストを実行</button>
+
+  <script>
+    let waitFlag = false;
+    const url = "https://bootcamp.fjord.jp";
+
+    const button01 = document.getElementById("button01");
+    button01.addEventListener("click", httpGet, false);
+
+    async function httpGet() {
+      const res = await fetch(url);
+      let text;
+      try {
+        if (res.ok) {
+          text = await res.text();
+          //console.log();
+        } else {
+          throw new Error(res.status);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+      console.log(text);
+    }
+  </script>
+</body>
+
+</html>
