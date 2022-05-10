@@ -9,14 +9,10 @@
 
 <body>
   <h1>Fetch API による HTTPリクエスト</h1>
-  <button id="button01">HTTPリクエストを実行</button>
 
   <script>
     let waitFlag = false;
     const url = "https://bootcamp.fjord.jp";
-
-    const button01 = document.getElementById("button01");
-    button01.addEventListener("click", httpGet, false);
 
     async function httpGet() {
       const res = await fetch(url);
@@ -24,7 +20,6 @@
       try {
         if (res.ok) {
           text = await res.text();
-          //console.log();
         } else {
           throw new Error(res.status);
         }
@@ -33,6 +28,7 @@
       }
       console.log(text);
     }
+    httpGet();
   </script>
 </body>
 
