@@ -9,13 +9,9 @@
 
 <body>
   <h1>Fetch API による HTTPリクエスト</h1>
-
   <script>
-    let waitFlag = false;
-    const url = "https://bootcamp.fjord.jp";
-
     async function httpGet() {
-      const res = await fetch(url);
+      const res = await fetch("https://bootcamp.fjord.jp");
       let text;
       try {
         if (res.ok) {
