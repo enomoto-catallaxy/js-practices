@@ -1,7 +1,7 @@
 const Enquirer = require('enquirer');
 var argv = require('minimist')(process.argv.slice(2));
 
-if(argv.l){
+/* if(argv.l){
   var sqlite = require('sqlite3').verbose();                                          
   var db = new sqlite.Database('test.sqlite');
 
@@ -9,12 +9,12 @@ if(argv.l){
   db.each("SELECT * FROM students", function(err, row) {
     console.log(row.name + ":" + row.age);
   });
-});
+}); */
 
-db.close();
-}
+//db.close();
+//}
 
-else if(argv.r){
+/* else if(argv.r){
   (async ()=> {
     const question = {
       type: 'select',
@@ -25,9 +25,9 @@ else if(argv.r){
     const answer = await Enquirer.prompt(question);
     console.log(answer.body);
   })();
-}
+} */
 
-else if(argv.e){
+/* else if(argv.e){
   var fs = require('fs'); 
   // キーの入力待ち状態にする。
   process.stdin.resume();
@@ -57,7 +57,7 @@ else if(argv.e){
   process.on('exit', function() {
       console.log('EXIT!!');
   });
-}
+} */
 
 
 
@@ -67,22 +67,65 @@ var db = new sqlite.Database('test.sqlite');
 db.serialize(function() {
 
   // テーブルがなければ作成
-  db.run('CREATE TABLE IF NOT EXISTS students(name TEXT, age INT)');
+  db.run('CREATE TABLE IF NOT EXISTS memos(body TEXT)');
+
   if(argv.a){
     // プリペアードステートメントでデータ挿入
-    var stmt = db.prepare('INSERT INTO students VALUES(?,?)');
-    stmt.run(["Tanaka", 12]);
-    stmt.run(["Sato", 13]);
-    stmt.run(["Nakamura", 15]);
+    var stmt = db.prepare('INSERT INTO memos VALUES(?)');
+    stmt.run(["メモ１"]);
+    stmt.run(["今日の日記"]);
+    stmt.run(["晩ご飯のレシピ"]);
     stmt.finalize();
   }
-  else if(argv.d){
-    db.run('DELETE FROM students WHERE age = 15', err => {
-      if (err) {
-        return console.error(err.message);
-      }
+  if(argv.r){
+    async function r_memofunc(){
+      const question = {
+        type: 'select',
+        name: 'body',
+        message: 'Choose a note you want to see:',
+        choices: ['メモ１', '今日の日記', '晩ご飯のレシピ'],
+      };
+      const answer = await Enquirer.prompt(question);
+      var body = answer.body;
+      return body;
+    };
+    r_memofunc().then(value => {
+      let body = value;
+      db.get("SELECT * FROM memos WHERE body = ?", [body], function(err, row) {
+        if (err) {
+          throw err;
+        }
+        console.log(row.body);
+      });
+    })
+  };
+  if(argv.l){
+    db.each("SELECT * FROM memos", function(err, row) {
+      console.log(row.body);
     });
   }
+  if(argv.d){
+    const Enquirer = require('enquirer');
+    async function d_memofunc(){
+      const question = {
+        type: 'select',
+        name: 'body',
+        message: 'Choose a note you want to see:',
+        choices: ['メモ１', '今日の日記', '晩ご飯のレシピ'],
+      };
+      const answer = await Enquirer.prompt(question);
+      var body = answer.body;
+      return body;
+    };
+    d_memofunc().then(value => {
+      let body = value;
+      db.run('DELETE FROM students WHERE body = ?',[body], err => {
+        if (err) {
+          return console.error(err.message);
+        }
+      });
+    });
+  };
 });
 
 db.close();
