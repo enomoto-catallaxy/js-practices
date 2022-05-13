@@ -5,11 +5,13 @@ if(argv.m){
 }else{
   month = today.getMonth() + 1;
 }
+
 if(argv.y){
   year = argv.y;
 }else{
   year = today.getFullYear();
 }
+
 let firstday = new Date(year, month - 1, 1); 
 let lastday = new Date(year, month, 0);
 
@@ -43,7 +45,7 @@ if(first_dayofweek != 0){
 }
 
 let space_dayarrays = spacearrays.concat(dayarrays);
-let oneweekarrays = eachSlice([...space_dayarrays],7);
+let oneweekarrays = eachSlice([...space_dayarrays], 7);
 for(let i = 0; i < oneweekarrays.length; i++){
   for(let j = 0; j < oneweekarrays[i].length; j++){
     process.stdout.write(oneweekarrays[i][j].padStart(3, ' '));
