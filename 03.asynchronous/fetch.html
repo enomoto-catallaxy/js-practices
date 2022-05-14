@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fetch API による HTTPリクエスト</title>
+</head>
+
+<body>
+  <h1>Fetch API による HTTPリクエスト</h1>
+  <script>
+    async function httpGet() {
+      const res = await fetch("https://bootcamp.fjord.jp");
+      let text;
+      try {
+        if (res.ok) {
+          text = await res.text();
+        } else {
+          throw new Error(res.status);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+      console.log(text);
+    }
+    httpGet();
+  </script>
+</body>
+
+</html>
