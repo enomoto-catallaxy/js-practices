@@ -1,15 +1,27 @@
+var sqlite = require('sqlite3').verbose();                                          
+var db = new sqlite.Database('test.sqlite');
+
 const Enquirer = require('enquirer');
-async function agefunc(){
+async function Dmemofunc(){
   const question = {
     type: 'select',
-    name: 'number',
-    message: '好きな番号は？',
-    choices: ['12', '13', '15'],
+    name: 'body',
+    message: 'Choose a note you want to delete:',
+    choices: ['メモ１', '今日の日記', '晩ご飯のレシピ'],
   };
   const answer = await Enquirer.prompt(question);
-  var age = parseInt(answer.number)
-  return age;
+  const body = answer.body;
+  run('DELETE FROM memos WHERE body = ?', [body]);
 };
-agefunc().then(value => {
-  console.log(value+10);
-});
+
+function run(sql, params) {
+	return new Promise((resolve, reject) => {
+		db.run(sql, params, (err) => {
+			if (err) reject(err);
+			resolve();
+		});
+    console.log(params)
+	});
+}
+
+Dmemofunc();
