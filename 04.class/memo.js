@@ -1,6 +1,5 @@
 const Enquirer = require('enquirer');
-var argv = require('minimist')(process.argv.slice(2));
-
+const argv = require('minimist')(process.argv.slice(2))
 var sqlite = require('sqlite3').verbose();                                          
 var db = new sqlite.Database('test.sqlite');
 

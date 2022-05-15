@@ -27,4 +27,3 @@ class optionD {
 
 let option = new optionD;
 option.deleteBodys();
-console.log(typeof(['メモ１', '今日の日記', '晩ご飯のレシピ']))
