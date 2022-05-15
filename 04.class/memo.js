@@ -1,4 +1,3 @@
-
 const Enquirer = require('enquirer');
 var argv = require('minimist')(process.argv.slice(2));
 
@@ -6,10 +5,8 @@ var sqlite = require('sqlite3').verbose();
 var db = new sqlite.Database('test.sqlite');
 
 db.serialize(function() {
-
   // テーブルがなければ作成
   db.run('CREATE TABLE IF NOT EXISTS memos(body TEXT)');
-
   if(argv.a){
     // プリペアードステートメントでデータ挿入
     var stmt = db.prepare('INSERT INTO memos VALUES(?)');
@@ -53,7 +50,6 @@ db.serialize(function() {
 
 db.close();
 if(argv.d){
-
   async function Dmemofunc(){
     const question = {
       type: 'select',
