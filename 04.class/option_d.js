@@ -17,7 +17,7 @@ class optionD {
       type: 'select',
       name: 'body',
       message: 'Choose a note you want to delete:',
-      choices: ['メモ１', '今日の日記', '晩ご飯のレシピ'],
+      choices: ['メモ２', '今日の日記', '晩ご飯のレシピ'],
     };
     const answer = await Enquirer.prompt(question);
     const body = answer.body;

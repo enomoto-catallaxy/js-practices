@@ -7,7 +7,7 @@ class optionL{
       if (err) {
         throw err;
       }
-      console.log(row.body);
+      console.log(`${row.body.split('\n')[0]}`);
     });
   }
 }

@@ -1,16 +1,42 @@
 var sqlite = require('sqlite3').verbose();                                          
 var db = new sqlite.Database('test.sqlite');
 const Enquirer = require('enquirer');
-var allBodys = ["togo", "enomoto", "block"]
+var AllBodys = [];
+var choices = [];
 
 class optionR{
-  index(){ //すべてのメモをreferBodys()のchoicesに格納させたい
-    db.each("SELECT * FROM memos", function(err, row) {
-      if (err) {
-        throw err;
-      }
-      return row.body
-    });
+  getBodys() {
+    return new Promise((resolve, reject) => {
+      db.serialize(() =>{
+        db.all("SELECT * FROM memos", function(err, row) {
+          if (err) return reject(err)
+          resolve(row)
+        })
+      })
+    })
+  }
+
+  index(){
+    this.getBodys().then(rows => {
+      rows.forEach(row => {
+        AllBodys.push(row);
+      })
+      const NumberOfObject = Object.keys(AllBodys).length
+      for (let i = 0; i < NumberOfObject ; i++) {
+        choices[i] = AllBodys[i].body
+      };
+      return choices;
+    }).then((choices) => {
+      const question = {
+        type: 'select',
+        name: 'body',
+        message: 'Choose a note you want to select:',
+        choices: choices
+      };
+      const answer = Enquirer.prompt(question);
+      const body = answer.body;
+      this.run('SELECT body FROM memos WHERE body = ?', [body]);
+    })
   }
 
   async referBodys(){
@@ -18,7 +44,7 @@ class optionR{
       type: 'select',
       name: 'body',
       message: 'Choose a note you want to select:',
-      choices: allBodys
+      choices: choices
     };
     const answer = await Enquirer.prompt(question);
     const body = answer.body;
@@ -31,11 +57,10 @@ class optionR{
         if (err) reject(err);
         resolve();
       });
-      console.log(params)
+      console.log(`${params}`)
     });
   }
 }
 
 let option = new optionR;
-allBodys[0] = option.index()
-option.referBodys();
+option.index();
