@@ -1,14 +1,24 @@
 var sqlite = require('sqlite3').verbose();                                          
 var db = new sqlite.Database('test.sqlite');
 const Enquirer = require('enquirer');
+var allBodys = ["togo", "enomoto", "block"]
 
 class optionR{
+  index(){ //すべてのメモをreferBodys()のchoicesに格納させたい
+    db.each("SELECT * FROM memos", function(err, row) {
+      if (err) {
+        throw err;
+      }
+      return row.body
+    });
+  }
+
   async referBodys(){
     const question = {
       type: 'select',
       name: 'body',
       message: 'Choose a note you want to select:',
-      choices: ['メモ１', '今日の日記', '晩ご飯のレシピ'],
+      choices: allBodys
     };
     const answer = await Enquirer.prompt(question);
     const body = answer.body;
@@ -27,4 +37,5 @@ class optionR{
 }
 
 let option = new optionR;
+allBodys[0] = option.index()
 option.referBodys();
