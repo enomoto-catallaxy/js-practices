@@ -1,8 +1,7 @@
 var sqlite = require('sqlite3').verbose();                                          
 var db = new sqlite.Database('test.sqlite');
 const Enquirer = require('enquirer');
-var AllBodys = [];
-var choices = [];
+const choices = [];
 
 class optionR{
   getBodys() {
@@ -16,40 +15,43 @@ class optionR{
     })
   }
 
-  index(){
+  allchoices(){
     this.getBodys().then(rows => {
-      rows.forEach(row => {
-        AllBodys.push(row);
+      return new Promise((resolve) => {
+        rows.forEach(row => {
+          choices.push(row);
+        })
+        const NumberOfObject = Object.keys(choices).length
+        for (let i = 0; i < NumberOfObject ; i++) {
+          choices[i] = choices[i].body
+        };
+        resolve(choices);
       })
-      const NumberOfObject = Object.keys(AllBodys).length
-      for (let i = 0; i < NumberOfObject ; i++) {
-        choices[i] = AllBodys[i].body
-      };
-      return choices;
-    }).then((choices) => {
-      const question = {
-        type: 'select',
-        name: 'body',
-        message: 'Choose a note you want to select:',
-        choices: choices
-      };
-      const answer = Enquirer.prompt(question);
-      const body = answer.body;
-      this.run('SELECT body FROM memos WHERE body = ?', [body]);
     })
   }
 
-  async referBodys(){
-    const question = {
-      type: 'select',
-      name: 'body',
-      message: 'Choose a note you want to select:',
-      choices: choices
-    };
-    const answer = await Enquirer.prompt(question);
-    const body = answer.body;
-    this.run('SELECT body FROM memos WHERE body = ?', [body]);
-  };
+  setChoices(){
+    this.allchoices().then(row => {
+        return new Promise((resolve) => {
+          const question = {
+            type: 'select',
+            name: 'body',
+            message: 'Choose a note you want to select:',
+            choices: row
+          };
+          resolve(Enquirer.prompt(question));
+        })
+      }
+    )
+  }
+
+  referBodys(){
+    this.setChoices().then(row => {
+      const answer = row
+      const body = answer.body
+      this.run('SELECT body FROM memos WHERE body = ?', [body]);
+    })
+  }
 
   run(sql, params) {
     return new Promise((resolve, reject) => {
@@ -63,4 +65,4 @@ class optionR{
 }
 
 let option = new optionR;
-option.index();
+option.referBodys();
