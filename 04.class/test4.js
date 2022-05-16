@@ -16,9 +16,10 @@ const beasts = ['ant', 'bison', 'camel', 'duck', 'bison'];
 console.log(beasts.indexOf('bison'));
 
 
-const sentence = 'The quick brown fox jumps over the lazy dog.';
+const sentences = ['The', 'quick brown fox', 'fox jumps over the lazy dog.'];
 const word = 'fox';
-console.log(`The word "${word}" ${sentence.includes(word) ? 'is' : 'is not'} in the sentence`);
-if(sentence.includes(word)){
-  console.log("true")
+for (let i = 0; i < sentences.length; i++) {
+  if(sentences[i].includes(word)){
+    console.log(sentences[i])
+  }
 }

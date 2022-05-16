@@ -15,16 +15,16 @@ class optionR{
     })
   }
 
-  async returnRecords(){ //レコードを要素に持つ配列を返す
+  async returnRecords(){ //レコードを要素に持つ配列を返す OK
     const records = await this.getRecords();
     const newRecords = [];
     records.forEach(element => {
       newRecords.push(element)
     })
-    return newRecords;
+    console.log(newRecords);
   }
 
-  async allchoices(){ //choicesとして各レコードのbodyカラムのみの配列を返す
+  async allchoices(){ //choicesとして各レコードのbodyカラムのみの配列を返す　OK
     const gottenRecords = await this.getRecords();
     gottenRecords.forEach(element => {
       choices.push(element)
@@ -36,43 +36,26 @@ class optionR{
     return choices;
   }
 
-  async choiceIndex(){ // choicesのindexが欲しい
-    let RecordTemps = await this.returnRecords();
+  async referBodys(){
     let BodyTemps = await this.allchoices();
+    let IncludeSpaceBodys = []
+    IncludeSpaceBodys = IncludeSpaceBodys.concat(BodyTemps)
     for (let i = 0; i < BodyTemps.length ; i++) {
       BodyTemps[i] = BodyTemps[i].split(' ')[0]
     };
     const question = {
       type: 'select',
       name: 'body',
-      message: 'Choose a note you want to select:',
+      message: 'Choose a note you want to refer:',
       choices: BodyTemps
     };
     const answer = await Enquirer.prompt(question);
-    const tempIndex = answer.id;
-    console.log(answer)
-  }
-
-  async setChoices(){
-    const bodys = await this.allchoices();
-    const tempIndex = await this.choiceIndex();
-    const body = bodys[tempIndex]
-    return body
-  }
-
-  async referBodys(){
-    const body = await this.setChoices();
-    this.run('SELECT body FROM bodys WHERE body = ?', [body]);
-  }
-
-  run(sql, params) {
-    return new Promise((resolve, reject) => {
-      db.get(sql, params, (err) => {
-        if (err) reject(err);
-        resolve();
-      });
-      console.log(`${params}`)
-    });
+    const NotIncludigSpaceInBody = answer.body;
+    for (let i = 0; i < IncludeSpaceBodys.length; i++) {
+      if(IncludeSpaceBodys[i].includes(NotIncludigSpaceInBody)){
+        console.log(IncludeSpaceBodys[i])
+      }
+    }
   }
 }
 

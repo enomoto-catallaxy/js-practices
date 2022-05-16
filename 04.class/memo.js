@@ -20,7 +20,7 @@ if(argv.l){
 
 if(argv.r){
   const option = new optionR();
-  option.choiceIndex();//idカラムが出力されない
+  option.referBodys();
 }
 
 if(argv.d){
