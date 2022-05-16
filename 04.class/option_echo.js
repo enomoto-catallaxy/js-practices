@@ -1,6 +1,6 @@
 var readline = require('readline');
 var sqlite = require('sqlite3').verbose();                                          
-var db = new sqlite.Database('test.sqlite');
+var db = new sqlite.Database('idtest2.sqlite');
 
 class optionEcho{
   addBodys(){
@@ -9,9 +9,8 @@ class optionEcho{
       output: process.stdout
     });
     rl.question(">> Input your new note!   ", function(answer) {
-      db.run('CREATE TABLE IF NOT EXISTS memos(body TEXT)');
-      var stmt = db.prepare('INSERT INTO memos VALUES(?)');
-      stmt.run([answer]);
+      db.run('CREATE TABLE IF NOT EXISTS bodys(id INTEGER PRIMARY KEY AUTOINCREMENT, body TEXT NOT NULL)');
+      db.run('INSERT INTO bodys(body) VALUES(?)', [answer]);
       rl.close();
     });
   }

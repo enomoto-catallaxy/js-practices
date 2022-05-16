@@ -1,5 +1,5 @@
 var sqlite = require('sqlite3').verbose();                                          
-var db = new sqlite.Database('test.sqlite');
+var db = new sqlite.Database('idtest2.sqlite');
 const Enquirer = require('enquirer');
 const choices = [];
 
@@ -7,7 +7,7 @@ class optionD {
   getBodys() {
     return new Promise((resolve, reject) => {
       db.serialize(() =>{
-        db.all("SELECT * FROM memos", function(err, row) {
+        db.all("SELECT * FROM bodys", function(err, row) {
           if (err) return reject(err)
           resolve(row)
         })
@@ -50,7 +50,7 @@ class optionD {
 
   async deleteBodys(){
     const body = await this.setChoices();
-    this.run('DELETE FROM memos WHERE body = ?', [body], function(err, row) {
+    this.run('DELETE FROM bodys WHERE body = ?', [body], function(err, row) {
       if (err){
         throw err;
       }
