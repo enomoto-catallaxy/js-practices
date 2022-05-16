@@ -1,12 +1,11 @@
 const argv = require('minimist')(process.argv.slice(2));
-var sqlite = require('sqlite3').verbose();                                          
-var db = new sqlite.Database('idtest2.sqlite');
+const sqlite = require('sqlite3').verbose();                                          
+const db = new sqlite.Database('idtest2.sqlite');
 
 const optionEcho = require('./option_echo.js')
 const optionL = require('./option_l.js')
 const optionR = require('./option_r.js')
 const optionD = require('./option_d.js')
-
 
 if(argv.a){
   const option = new optionEcho();
@@ -20,7 +19,7 @@ if(argv.l){
 
 if(argv.r){
   const option = new optionR();
-  option.referBodys();
+  option.referBodys(db);
 }
 
 if(argv.d){
