@@ -1,6 +1,6 @@
 const argv = require('minimist')(process.argv.slice(2));
 const sqlite = require('sqlite3').verbose();                                          
-const db = new sqlite.Database('idtest2.sqlite');
+const db = new sqlite.Database('memo.sqlite');
 
 const optionEcho = require('./option_echo.js')
 const optionL = require('./option_l.js')
@@ -9,12 +9,12 @@ const optionD = require('./option_d.js')
 
 if(argv.a){
   const option = new optionEcho();
-  option.addBodys();
+  option.addBodys(db);
 }
 
 if(argv.l){
   const option = new optionL();
-  option.listBodeys();
+  option.listBodeys(db);
 }
 
 if(argv.r){
@@ -24,5 +24,5 @@ if(argv.r){
 
 if(argv.d){
   const option = new optionD();
-  option.deleteBodys();
+  option.deleteBodys(db);
 }

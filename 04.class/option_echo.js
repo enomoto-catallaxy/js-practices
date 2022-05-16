@@ -1,9 +1,7 @@
 var readline = require('readline');
-var sqlite = require('sqlite3').verbose();                                          
-var db = new sqlite.Database('idtest2.sqlite');
 
 class optionEcho{
-  addBodys(){
+  addBodys(db){
     var rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout

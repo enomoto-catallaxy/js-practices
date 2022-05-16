@@ -1,5 +1,3 @@
-var sqlite = require('sqlite3').verbose();                                          
-var db = new sqlite.Database('idtest2.sqlite');
 const Enquirer = require('enquirer');
 const question = {
   type: 'select',
@@ -8,7 +6,7 @@ const question = {
 };
 
 class optionD {
-  getRecords() {
+  getRecords(db) {
     return new Promise((resolve, reject) => {
       db.serialize(() =>{
         db.all("SELECT * FROM bodys", function(err, row) {
@@ -19,9 +17,9 @@ class optionD {
     })
   }
 
-  async getChoices(){
+  async getChoices(db){
     const choices = [];
-    const gottenRecords = await this.getRecords();
+    const gottenRecords = await this.getRecords(db);
     gottenRecords.forEach(element => choices.push(element))
     for (let i = 0; i < Object.keys(choices).length ; i++) {
       choices[i] = choices[i].body
@@ -29,8 +27,8 @@ class optionD {
     return choices;
   }
 
-  async deleteBodys(){
-    let alternatives = await this.getChoices();
+  async deleteBodys(db){
+    let alternatives = await this.getChoices(db);
     let IncludeSpaceBodys = []
     let body
     IncludeSpaceBodys = IncludeSpaceBodys.concat(alternatives)
@@ -45,10 +43,10 @@ class optionD {
         break;
       }
     }
-    this.run('DELETE FROM bodys WHERE body = ?', [body]);
+    this.run('DELETE FROM bodys WHERE body = ?', [body], db);
   }
 
-  run(sql, params) {
+  run(sql, params, db) {
     return new Promise((resolve, reject) => {
       db.run(sql, params, (err) => {
         if (err) reject(err);
