@@ -7,10 +7,9 @@ class optionL{
       if (err) {
         throw err;
       }
-      console.log(`${row.body.split('\n')[0]}`);
+      console.log(`${row.body.split(' ')[0]}`);
     });
   }
 }
 
-var option = new optionL;
-option.index();
+module.exports = optionL;

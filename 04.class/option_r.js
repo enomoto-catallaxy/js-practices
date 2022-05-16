@@ -15,42 +15,33 @@ class optionR{
     })
   }
 
-  allchoices(){
-    this.getBodys().then(rows => {
-      return new Promise((resolve) => {
-        rows.forEach(row => {
-          choices.push(row);
-        })
-        const NumberOfObject = Object.keys(choices).length
-        for (let i = 0; i < NumberOfObject ; i++) {
-          choices[i] = choices[i].body
-        };
-        resolve(choices);
-      })
+  async allchoices(){
+    const gottenBodys = await this.getBodys();
+    gottenBodys.forEach(element => {
+      choices.push(element)
     })
+    const NumberOfObject = Object.keys(choices).length
+    for (let i = 0; i < NumberOfObject ; i++) {
+      choices[i] = choices[i].body
+    };
+    return choices;
   }
 
-  setChoices(){
-    this.allchoices().then(row => {
-        return new Promise((resolve) => {
-          const question = {
-            type: 'select',
-            name: 'body',
-            message: 'Choose a note you want to select:',
-            choices: row
-          };
-          resolve(Enquirer.prompt(question));
-        })
-      }
-    )
+  async setChoices(){
+    const temps = await this.allchoices();
+    const question = {
+      type: 'select',
+      name: 'body',
+      message: 'Choose a note you want to select:',
+      choices: temps
+    };
+    const answer = await Enquirer.prompt(question);
+    return answer.body;
   }
 
-  referBodys(){
-    this.setChoices().then(row => {
-      const answer = row
-      const body = answer.body
-      this.run('SELECT body FROM memos WHERE body = ?', [body]);
-    })
+  async referBodys(){
+    const body = await this.setChoices();
+    this.run('SELECT body FROM memos WHERE body = ?', [body]);
   }
 
   run(sql, params) {
@@ -64,5 +55,4 @@ class optionR{
   }
 }
 
-let option = new optionR;
-option.referBodys();
+module.exports = optionR;

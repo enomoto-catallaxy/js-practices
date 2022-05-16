@@ -10,6 +10,9 @@ async function agefunc(){
   var age = parseInt(answer.number)
   return age;
 };
-agefunc().then(value => {
+async function show(){
+  const value = await agefunc()
   console.log(value);
-});
+};
+
+show();

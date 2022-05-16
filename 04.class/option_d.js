@@ -14,6 +14,31 @@ class optionD {
       })
     })
   }
+
+  async allchoices(){
+    const gottenBodys = await this.getBodys();
+    gottenBodys.forEach(element => {
+      choices.push(element)
+    })
+    const NumberOfObject = Object.keys(choices).length
+    for (let i = 0; i < NumberOfObject ; i++) {
+      choices[i] = choices[i].body
+    };
+    return choices;
+  }
+
+  async setChoices(){
+    const temps = await this.allchoices();
+    const question = {
+      type: 'select',
+      name: 'body',
+      message: 'Choose a note you want to delete:',
+      choices: temps
+    };
+    const answer = await Enquirer.prompt(question);
+    return answer.body;
+  }
+
   run(sql, params) {
     return new Promise((resolve, reject) => {
       db.run(sql, params, (err) => {
@@ -23,29 +48,14 @@ class optionD {
     });
   }
 
-  deleteBodys() {
-    this.getBodys().then(rows => {
-      rows.forEach(row => {
-        choices.push(row);
-      })
-      const NumberOfObject = Object.keys(choices).length
-      for (let i = 0; i < NumberOfObject ; i++) {
-        choices[i] = choices[i].body
-      };
-      return choices;
-    }).then((choices) => {
-      const question = {
-        type: 'select',
-        name: 'body',
-        message: 'Choose a note you want to select:',
-        choices: choices
-      };
-      const answer = Enquirer.prompt(question);
-      const body = answer.body;
-      this.run('DELETE FROM memos WHERE body = ?', [body]);
-    })
+  async deleteBodys(){
+    const body = await this.setChoices();
+    this.run('DELETE FROM memos WHERE body = ?', [body], function(err, row) {
+      if (err){
+        throw err;
+      }
+    });
   }
 }
 
-let option = new optionD;
-option.deleteBodys();
+module.exports = optionD;

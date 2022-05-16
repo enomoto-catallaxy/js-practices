@@ -16,6 +16,4 @@ class optionEcho{
     });
   }
 }
-
-let option = new optionEcho;
-option.addBodys();
+module.exports = optionEcho;
