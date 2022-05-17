@@ -28,7 +28,7 @@ class optionD {
   }
 
   async deleteBodys(db){
-    let alternatives = await this.getChoices(db);
+    const alternatives = await this.getChoices(db);
     let IncludeSpaceBodys = []
     let body
     IncludeSpaceBodys = IncludeSpaceBodys.concat(alternatives)

@@ -1,5 +1,5 @@
-class optionL{
-  listBodeys(db){
+class optionL {
+  listBodeys(db) {
     db.each("SELECT * FROM bodys", function(err, row) {
       if (err) {
         throw err;
