@@ -30,7 +30,7 @@ for (let i = 0; i < 7; i++) {
 };
 console.log()
 
-const eachSlice = (arr, n = 2, result = []) => {
+const eachSlice = (arr, n, result = []) => {
   if (arr.length === 0) {
     return result
   }
