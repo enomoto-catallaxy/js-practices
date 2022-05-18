@@ -1,15 +1,15 @@
-const Enquirer = require('enquirer');
+const Enquirer = require('enquirer')
 const question = {
   type: 'select',
   name: 'body',
-  message: 'Choose a note you want to refer:',
-};
+  message: 'Choose a note you want to refer:'
+}
 
-class optionR {
-  getRecords(db) {
+class OptionR {
+  getRecords (db) {
     return new Promise((resolve, reject) => {
-      db.serialize(() =>{
-        db.all("SELECT * FROM bodys", function(err, row) {
+      db.serialize(() => {
+        db.all('SELECT * FROM bodys', function (err, row) {
           if (err) return reject(err)
           resolve(row)
         })
@@ -17,43 +17,44 @@ class optionR {
     })
   }
 
-  async getObjects(db){ //idとbodyを要素に持つオブジェクトを得る
-    const objects = [];
-    const gottenRecords = await this.getRecords(db);
+  async getObjects (db) {
+    const objects = []
+    const gottenRecords = await this.getRecords(db)
     gottenRecords.forEach(element => objects.push(element))
-    return objects;
+    return objects
   }
 
-  async getBodys(db){ //bodyのみを要素にもつオブジェクトを得る
-    let objects = await this.getObjects(db)
-    let choices = []
-    for (let i = 0; i < Object.keys(objects).length ; i++) {
+  async getBodys (db) {
+    const objects = await this.getObjects(db)
+    const choices = []
+    for (let i = 0; i < Object.keys(objects).length; i++) {
       choices[i] = objects[i].body
-    };
+    }
     return choices
   }
 
-  async getAnswers(db){
-    let alternatives = await this.getBodys(db);
+  async getAnswers (db) {
+    const alternatives = await this.getBodys(db)
     let IncludeSpaceBodys = []
-    let refernce
     IncludeSpaceBodys = IncludeSpaceBodys.concat(alternatives)
     for (let i = 0; i < alternatives.length; i++) {
       alternatives[i] = alternatives[i].split(' ')[0].split('　')[0]
-    };
-    question.choices = alternatives;
+    }
+    question.choices = alternatives
     const answer = await Enquirer.prompt(question)
     const bodys = alternatives.map((obj) => obj.name)
     const answerId = bodys.indexOf(answer.body)
-    console.log (IncludeSpaceBodys[answerId])
-    /* for (let i = 0; i < removedLargeSpace.length; i++){
-      for (let j = 0; removedAllSpaces.length; j++) {
-        let removedAllSpaces = removedLargeSpace[i].split(' ')
-
-        console.log(removedAllSpaces[j])
+    const refernce = IncludeSpaceBodys[answerId]
+    const removedLargeSpaces = refernce.split('　')
+    const removedAllSpaces = []
+    for (let i = 0; i < removedLargeSpaces.length; i++) {
+      removedAllSpaces[i] = []
+      removedAllSpaces[i] = removedLargeSpaces[i].split(' ')
+      for (let j = 0; j < removedAllSpaces[i].length; j++) {
+        console.log(removedAllSpaces[i][j])
       }
-    } */
+    }
   }
 }
 
-module.exports = optionR;
+module.exports = OptionR

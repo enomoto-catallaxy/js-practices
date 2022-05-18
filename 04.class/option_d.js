@@ -1,15 +1,15 @@
-const Enquirer = require('enquirer');
+const Enquirer = require('enquirer')
 const question = {
   type: 'select',
   name: 'body',
-  message: 'Choose a note you want to delete:',
-};
+  message: 'Choose a note you want to delete:'
+}
 
-class optionD {
-  getRecords(db) {
+class OptionD {
+  getRecords (db) {
     return new Promise((resolve, reject) => {
-      db.serialize(() =>{
-        db.all("SELECT * FROM bodys", function(err, row) {
+      db.serialize(() => {
+        db.all('SELECT * FROM bodys', function (err, row) {
           if (err) return reject(err)
           resolve(row)
         })
@@ -17,43 +17,43 @@ class optionD {
     })
   }
 
-  async getChoices(db){
-    const choices = [];
-    const gottenRecords = await this.getRecords(db);
+  async getChoices (db) {
+    const choices = []
+    const gottenRecords = await this.getRecords(db)
     gottenRecords.forEach(element => choices.push(element))
-    for (let i = 0; i < Object.keys(choices).length ; i++) {
+    for (let i = 0; i < Object.keys(choices).length; i++) {
       choices[i] = choices[i].body
-    };
-    return choices;
+    }
+    return choices
   }
 
-  async deleteBodys(db){
-    const alternatives = await this.getChoices(db);
+  async deleteBodys (db) {
+    const alternatives = await this.getChoices(db)
     let IncludeSpaceBodys = []
     let body
     IncludeSpaceBodys = IncludeSpaceBodys.concat(alternatives)
-    for (let i = 0; i < alternatives.length ; i++) {
+    for (let i = 0; i < alternatives.length; i++) {
       alternatives[i] = alternatives[i].split(' ')[0].split('　')[0]
-    };
-    question.choices = alternatives;
-    const answer = await Enquirer.prompt(question);
+    }
+    question.choices = alternatives
+    const answer = await Enquirer.prompt(question)
     for (let i = 0; i < IncludeSpaceBodys.length; i++) {
-      if(IncludeSpaceBodys[i].includes(answer.body)){
-        body = IncludeSpaceBodys[i];
-        break;
+      if (IncludeSpaceBodys[i].includes(answer.body)) {
+        body = IncludeSpaceBodys[i]
+        break
       }
     }
-    this.run('DELETE FROM bodys WHERE body = ?', [body], db);
+    this.run('DELETE FROM bodys WHERE body = ?', [body], db)
   }
 
-  run(sql, params, db) {
+  run (sql, params, db) {
     return new Promise((resolve, reject) => {
       db.run(sql, params, (err) => {
-        if (err) reject(err);
-        resolve();
-      });
-    });
+        if (err) reject(err)
+        resolve()
+      })
+    })
   }
 }
 
-module.exports = optionD;
+module.exports = OptionD
