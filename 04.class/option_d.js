@@ -9,7 +9,7 @@ class OptionD {
   getRecords (db) {
     return new Promise((resolve, reject) => {
       db.serialize(() => {
-        db.all('SELECT * FROM bodys', function (err, row) {
+        db.all('SELECT * FROM memos', function (err, row) {
           if (err) return reject(err)
           resolve(row)
         })
@@ -43,7 +43,7 @@ class OptionD {
         break
       }
     }
-    this.run('DELETE FROM bodys WHERE body = ?', [body], db)
+    this.run('DELETE FROM memos WHERE body = ?', [body], db)
   }
 
   run (sql, params, db) {

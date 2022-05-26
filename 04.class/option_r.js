@@ -9,7 +9,7 @@ class OptionR {
   getRecords (db) {
     return new Promise((resolve, reject) => {
       db.serialize(() => {
-        db.all('SELECT * FROM bodys', function (err, row) {
+        db.all('SELECT * FROM memos', function (err, row) {
           if (err) return reject(err)
           resolve(row)
         })
@@ -35,8 +35,8 @@ class OptionR {
 
   async getAnswers (db) {
     const alternatives = await this.getBodys(db)
-    let IncludeSpaceBodys = []
-    IncludeSpaceBodys = IncludeSpaceBodys.concat(alternatives)
+    let includeSpaceBodys = []
+    includeSpaceBodys = includeSpaceBodys.concat(alternatives)
     for (let i = 0; i < alternatives.length; i++) {
       alternatives[i] = alternatives[i].split(' ')[0].split('　')[0]
     }
@@ -44,8 +44,8 @@ class OptionR {
     const answer = await Enquirer.prompt(question)
     const bodys = alternatives.map((obj) => obj.name)
     const answerId = bodys.indexOf(answer.body)
-    const refernce = IncludeSpaceBodys[answerId]
-    const removedLargeSpaces = refernce.split('　')
+    const reference = includeSpaceBodys[answerId]
+    const removedLargeSpaces = reference.split('　')
     const removedAllSpaces = []
     for (let i = 0; i < removedLargeSpaces.length; i++) {
       removedAllSpaces[i] = []

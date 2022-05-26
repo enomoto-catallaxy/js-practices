@@ -7,8 +7,7 @@ class OptionEcho {
       output: process.stdout
     })
     rl.question('>> Input your new note!   ', function (answer) {
-      db.run('CREATE TABLE IF NOT EXISTS bodys(id INTEGER PRIMARY KEY AUTOINCREMENT, body TEXT NOT NULL)')
-      db.run('INSERT INTO bodys(body) VALUES(?)', [answer])
+      db.run('INSERT INTO memos(body) VALUES(?)', [answer])
       rl.close()
     })
   }
